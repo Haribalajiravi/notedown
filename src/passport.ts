@@ -7,12 +7,14 @@ const JwtStrategy = passportJwt.Strategy;
 import GooglePlusTokenStrategy from 'passport-google-plus-token';
 import User, { IUser } from './models/user';
 import { Request } from 'express';
+import dotEnv from 'dotenv';
+dotEnv.config();
 
 passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-      secretOrKey: 'SuperSecretJWT',
+      secretOrKey: process.env.JWT_SECRET || 'NDSfkdkDAFnl',
     },
     async (payload: any, done: VerifiedCallback) => {
       try {
@@ -36,10 +38,8 @@ passport.use(
   'googleToken',
   new GooglePlusTokenStrategy(
     {
-      clientID:
-        '1095678003481-73p73e2k71189h3plkdejmqa8mroqr1g.apps.googleusercontent.com',
-      clientSecret: 'PAWHDNZlmXvQe4vh5GDmLAjz',
-      callbackURL: 'http://localhost:3000/auth/google/callback',
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       passReqToCallback: true,
     },
     async (

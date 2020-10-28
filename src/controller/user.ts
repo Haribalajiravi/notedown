@@ -1,15 +1,17 @@
 import JWT from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import dotEnv from 'dotenv';
+dotEnv.config();
 
 const signToken = (user: any) => {
   return JWT.sign(
     {
-      iss: 'TaskManager',
+      iss: 'NoteDown',
       sub: user.id,
       iat: new Date().getTime(),
       exp: new Date().setDate(new Date().getDate() + 1),
     },
-    'SuperSecretJWT'
+    process.env.JWT_SECRET || 'NDSfkdkDAFnl'
   );
 };
 

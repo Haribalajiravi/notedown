@@ -4,17 +4,22 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import UserRoutes from './routes/user';
+import dotEnv from 'dotenv';
+dotEnv.config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/taskmanager', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  process.env.MONGO_DB_URL || 'mongodb://localhost/notedown',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );
