@@ -5,7 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import UserRoutes from './routes/user';
 import dotEnv from 'dotenv';
-import swaggerUI from 'swagger-ui-express';
+import swaggerUI, { SwaggerOptions } from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import ProductConfig from './config';
 dotEnv.config();
@@ -19,13 +19,16 @@ mongoose.connect(
   }
 );
 
-const options = {
-  definition: ProductConfig.swagger.definition,
-  // Path to the API docs
-  apis: ['./routes/routes.js'],
+const options: SwaggerOptions = {
+  swaggerDefinition: ProductConfig.swagger.definition,
+  apis: ['./src/routes/user.ts'],
 };
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(options)));
+app.use(
+  '/docs',
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerJsDoc(options))
+);
 
 app.use(cookieParser());
 app.use(

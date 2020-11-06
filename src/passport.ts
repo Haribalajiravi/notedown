@@ -13,7 +13,7 @@ dotEnv.config();
 passport.use(
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET || 'NDSfkdkDAFnl',
     },
     async (payload: any, done: VerifiedCallback) => {
