@@ -1,4 +1,9 @@
-import express from 'express';
+import express, {
+  ErrorRequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from 'express';
 const app: express.Application = express();
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -40,6 +45,14 @@ app.use(
 
 app.use(express.json());
 app.use('/user', UserRoutes);
+app.use(
+  (err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof SyntaxError && 'body' in err) {
+      return res.status(400).send({ success: false, message: err });
+    }
+    next();
+  }
+);
 
 const port: string = process.env.PORT || ProductConfig.port;
 app.listen(port);
